@@ -13,6 +13,7 @@ C:\Users\user\Repos\DNDprojects\DnDMonsterFightSimulator\MonsterFighter\obj\Debu
 C:\Users\user\Repos\DNDprojects\DnDMonsterFightSimulator\MonsterFighter\obj\Debug\net8.0\MonsterFighter.genruntimeconfig.cache
 C:\Users\user\Repos\DNDprojects\DnDMonsterFightSimulator\MonsterFighter\obj\Debug\net8.0\ref\MonsterFighter.dll
 C:\Users\user\Repos\DNDprojects\DnDMonsterFightSimulator\MonsterFighter\obj\Debug\net8.0\MonsterFighter.sourcelink.json
+<<<<<<< HEAD
 C:\Users\Dawid Bukowski\Desktop\dddd\DnDMonsterFighter\MonsterFighter\obj\Debug\net8.0\MonsterFighter.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Dawid Bukowski\Desktop\dddd\DnDMonsterFighter\MonsterFighter\obj\Debug\net8.0\MonsterFighter.AssemblyInfoInputs.cache
 C:\Users\Dawid Bukowski\Desktop\dddd\DnDMonsterFighter\MonsterFighter\obj\Debug\net8.0\MonsterFighter.AssemblyInfo.cs
@@ -28,3 +29,5 @@ C:\Users\Dawid Bukowski\Desktop\dddd\DnDMonsterFighter\MonsterFighter\bin\Debug\
 C:\Users\Dawid Bukowski\Desktop\dddd\DnDMonsterFighter\MonsterFighter\bin\Debug\net8.0\MonsterFighter.pdb
 C:\Users\Dawid Bukowski\Desktop\dddd\DnDMonsterFighter\MonsterFighter\obj\Debug\net8.0\MonsterFighter.genruntimeconfig.cache
 C:\Users\Dawid Bukowski\Desktop\dddd\DnDMonsterFighter\MonsterFighter\obj\Debug\net8.0\ref\MonsterFighter.dll
+=======
+>>>>>>> dc38a0fe3a7582fece00f1258f36b24606c94829
