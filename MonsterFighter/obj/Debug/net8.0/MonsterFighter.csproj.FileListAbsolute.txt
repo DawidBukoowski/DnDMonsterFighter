@@ -12,3 +12,19 @@ C:\Users\user\Repos\DNDprojects\DnDMonsterFightSimulator\MonsterFighter\obj\Debu
 C:\Users\user\Repos\DNDprojects\DnDMonsterFightSimulator\MonsterFighter\obj\Debug\net8.0\MonsterFighter.pdb
 C:\Users\user\Repos\DNDprojects\DnDMonsterFightSimulator\MonsterFighter\obj\Debug\net8.0\MonsterFighter.genruntimeconfig.cache
 C:\Users\user\Repos\DNDprojects\DnDMonsterFightSimulator\MonsterFighter\obj\Debug\net8.0\ref\MonsterFighter.dll
+C:\Users\user\Repos\DNDprojects\DnDMonsterFightSimulator\MonsterFighter\obj\Debug\net8.0\MonsterFighter.sourcelink.json
+C:\Users\Dawid Bukowski\Desktop\dddd\DnDMonsterFighter\MonsterFighter\obj\Debug\net8.0\MonsterFighter.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Dawid Bukowski\Desktop\dddd\DnDMonsterFighter\MonsterFighter\obj\Debug\net8.0\MonsterFighter.AssemblyInfoInputs.cache
+C:\Users\Dawid Bukowski\Desktop\dddd\DnDMonsterFighter\MonsterFighter\obj\Debug\net8.0\MonsterFighter.AssemblyInfo.cs
+C:\Users\Dawid Bukowski\Desktop\dddd\DnDMonsterFighter\MonsterFighter\obj\Debug\net8.0\MonsterFighter.csproj.CoreCompileInputs.cache
+C:\Users\Dawid Bukowski\Desktop\dddd\DnDMonsterFighter\MonsterFighter\obj\Debug\net8.0\MonsterFighter.sourcelink.json
+C:\Users\Dawid Bukowski\Desktop\dddd\DnDMonsterFighter\MonsterFighter\obj\Debug\net8.0\MonsterFighter.dll
+C:\Users\Dawid Bukowski\Desktop\dddd\DnDMonsterFighter\MonsterFighter\obj\Debug\net8.0\refint\MonsterFighter.dll
+C:\Users\Dawid Bukowski\Desktop\dddd\DnDMonsterFighter\MonsterFighter\obj\Debug\net8.0\MonsterFighter.pdb
+C:\Users\Dawid Bukowski\Desktop\dddd\DnDMonsterFighter\MonsterFighter\bin\Debug\net8.0\MonsterFighter.exe
+C:\Users\Dawid Bukowski\Desktop\dddd\DnDMonsterFighter\MonsterFighter\bin\Debug\net8.0\MonsterFighter.deps.json
+C:\Users\Dawid Bukowski\Desktop\dddd\DnDMonsterFighter\MonsterFighter\bin\Debug\net8.0\MonsterFighter.runtimeconfig.json
+C:\Users\Dawid Bukowski\Desktop\dddd\DnDMonsterFighter\MonsterFighter\bin\Debug\net8.0\MonsterFighter.dll
+C:\Users\Dawid Bukowski\Desktop\dddd\DnDMonsterFighter\MonsterFighter\bin\Debug\net8.0\MonsterFighter.pdb
+C:\Users\Dawid Bukowski\Desktop\dddd\DnDMonsterFighter\MonsterFighter\obj\Debug\net8.0\MonsterFighter.genruntimeconfig.cache
+C:\Users\Dawid Bukowski\Desktop\dddd\DnDMonsterFighter\MonsterFighter\obj\Debug\net8.0\ref\MonsterFighter.dll
