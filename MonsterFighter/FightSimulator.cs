@@ -79,15 +79,18 @@ namespace MonsterFighter
 
         private static void ExecuteSingleAttack(Monster attacker, Monster defender, Attack attack, Random rand, bool advantage = false, bool disadvantage = false)
         {
-
             int roll;
-            if(advantage){
+            if (advantage)
+            {
                 roll = RollWithAdvantageOrDisadvantage(rand, true);
                 Console.WriteLine($"{attacker.Name} attacks with advantage!");
-            } else if(disadvantage) {
+            }
+            else if (disadvantage)
+            {
                 roll = RollWithAdvantageOrDisadvantage(rand, false);
                 Console.WriteLine($"{attacker.Name} attacks with disadvantage!");
-            } else {roll = rand.Next(1, 21);}
+            }
+            else { roll = rand.Next(1, 21); }
 
             int toHit = roll + attack.BonusToHit;
             Console.WriteLine($"{attacker.Name} attacks with {attack.Name}: {toHit} ({roll}+{attack.BonusToHit}) to hit!");
@@ -97,12 +100,10 @@ namespace MonsterFighter
                 Console.WriteLine("Critical miss!");
                 return;
             }
-            int damage = attack.RollDamage(rand);
-
-            if (roll == 20)
+            bool isCritical = roll == 20;
+            if (isCritical)
             {
-                damage = ApplyDamageModifiers(defender, attack.DamageType, damage) * 2;
-                Console.WriteLine($"Critical hit! {defender.Name} takes {damage} {attack.DamageType} damage!");
+                Console.WriteLine($"Critical hit!");
             }
             else if (toHit < defender.ArmorClass)
             {
@@ -111,10 +112,26 @@ namespace MonsterFighter
             }
             else
             {
-                damage = ApplyDamageModifiers(defender, attack.DamageType, damage);
-                Console.WriteLine($"Hit! {defender.Name} takes {damage} {attack.DamageType} damage!");
+                Dictionary<DamageType, int> damageSummary = [];
+
+                foreach (var damageComponent in attack.DamageComponents)
+                {
+                    int damage = damageComponent.RollDamage(rand);
+                    if (isCritical) damage *= 2;
+                    damage = ApplyDamageModifiers(defender, damageComponent.DamageType, damage);
+                    if (damageSummary.ContainsKey(damageComponent.DamageType))
+                    {
+                        damageSummary[damageComponent.DamageType] += damage;
+                    }
+                    else
+                    {
+                        damageSummary[damageComponent.DamageType] = damage;
+                    }
+
+                    defender.CurrentHitPoints -= damage;
+                    Console.WriteLine($"Hit! {defender.Name} takes {damage} {damageComponent.DamageType} damage!");
+                }
             }
-            defender.CurrentHitPoints -= damage;
         }
 
         private static int ApplyDamageModifiers(Monster defender, DamageType damageType, int damage)

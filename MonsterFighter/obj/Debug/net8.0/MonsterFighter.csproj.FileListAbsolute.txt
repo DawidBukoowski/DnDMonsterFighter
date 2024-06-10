@@ -12,3 +12,4 @@ C:\Users\user\Repos\DNDprojects\DnDMonsterFightSimulator\MonsterFighter\obj\Debu
 C:\Users\user\Repos\DNDprojects\DnDMonsterFightSimulator\MonsterFighter\obj\Debug\net8.0\MonsterFighter.pdb
 C:\Users\user\Repos\DNDprojects\DnDMonsterFightSimulator\MonsterFighter\obj\Debug\net8.0\MonsterFighter.genruntimeconfig.cache
 C:\Users\user\Repos\DNDprojects\DnDMonsterFightSimulator\MonsterFighter\obj\Debug\net8.0\ref\MonsterFighter.dll
+C:\Users\user\Repos\DNDprojects\DnDMonsterFightSimulator\MonsterFighter\obj\Debug\net8.0\MonsterFighter.sourcelink.json
