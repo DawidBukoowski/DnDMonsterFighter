@@ -16,14 +16,15 @@ Monster blood_tool_harpy = new("Blood-Toll Harpy", 11, 9,
         new("Claws", 3, [new("1d4+1", DamageType.Slashing)])
     ])
 ]);
-Monster flumph = new("Flumph", 12, 7,
+Monster flumph = new("Flumph", 12, 99,
     6, 15, 10, 14, 14, 11, [
     new("Tendrils", 4, [
         new("1d4+2", DamageType.Piercing),
         new("1d4", DamageType.Acid),
-        ])
+        ],
+        statusEffect: new("Acid Burn", -1, MonsterFighter.Attribute.Constitution, 10, new("1d4", DamageType.Acid)))
 ], vulnerabilities: [DamageType.Psychic]);
-Monster flying_snake = new("Flying Snake", 14, 5,
+Monster flying_snake = new("Flying Snake", 14, 50,
 4, 18, 11, 2, 12, 5, [
     new("Bite", 6, [
         new(1, DamageType.Piercing),

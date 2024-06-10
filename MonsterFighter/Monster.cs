@@ -6,16 +6,19 @@ namespace MonsterFighter
         public int ArmorClass { get; set; } = armorClass;
         public int MaxHitPoints { get; set; } = hitPoints;
         public int CurrentHitPoints { get; set; } = hitPoints;
-        public int Strength { get; set; } = strength;
-        public int Dexterity { get; set; } = dexterity;
-        public int Constitution { get; set; } = constitution;
-        public int Intelligence { get; set; } = intelligence;
-        public int Wisdom { get; set; } = wisdom;
-        public int Charisma { get; set; } = charisma;
+        public Dictionary<Attribute, int> Attributes {get; set;} = new Dictionary<Attribute, int> {
+            {Attribute.Strength, strength},
+            {Attribute.Dexterity, dexterity},
+            {Attribute.Constitution, constitution},
+            {Attribute.Intelligence, intelligence},
+            {Attribute.Wisdom, wisdom},
+            {Attribute.Charisma, charisma}
+        };
         public List<Attack> Attacks { get; set; } = attacks;
         public List<DamageType> Immunities { get; set; } = immunities ?? [];
         public List<DamageType> Resistances { get; set; } = resistances ?? [];
         public List<DamageType> Vulnerabilities { get; set; } = vulnerabilities ?? [];
+        public List<StatusEffect> StatusEffects { get; set; } = [];
 
         public void Heal()
         {
@@ -24,17 +27,34 @@ namespace MonsterFighter
         public int RollInitiative(Random rand)
         {
             int roll = rand.Next(1, 21);
-            int total = roll + GetModifier(Dexterity);
-            Console.WriteLine($"{Name} rolled {total} ({roll}+{GetModifier(Dexterity)}) for initiative.");
+            int total = roll + GetModifier(Attribute.Dexterity);
+            Console.WriteLine($"{Name} rolled {total} ({roll}+{GetModifier(Attribute.Dexterity)}) for initiative.");
             return total;
         }
         public string GetCurrentHP()
         {
             return $"{CurrentHitPoints}/{MaxHitPoints}";
         }
-        public static int GetModifier(int attribute)
+        public int GetModifier(Attribute attribute)
         {
-            return (attribute - 10) / 2;
+            if(Attributes.TryGetValue(attribute, out int value)) return (value - 10) / 2;
+            throw new ArgumentException($"Attribute {attribute} not found.");
+        }
+        public void ApplyStatusEffect(StatusEffect effect) {
+            StatusEffects.Add(effect);
+            Console.WriteLine($"{Name} is affected by {effect.Name}");
+        }
+        public void ResolveStatusEffects(Random rand){
+            List<StatusEffect> effectsToRemove = [];
+            foreach (var effect in StatusEffects){
+                if(effect.ResolveEffect(this, rand)) effectsToRemove.Add(effect);
+                else if(effect.Duration > 0) effect.Duration--;
+                if(effect.Duration == 0) effectsToRemove.Add(effect);
+            }
+            foreach (var effect in effectsToRemove){
+                StatusEffects.Remove(effect);
+                Console.WriteLine($"{Name} is no longer affected by {effect.Name}.");
+            }
         }
     }
 }

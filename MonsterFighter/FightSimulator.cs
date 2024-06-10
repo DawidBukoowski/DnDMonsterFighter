@@ -35,6 +35,8 @@ namespace MonsterFighter
 
         private static void PerformTurn(Monster attacker, Monster defender, Random rand)
         {
+            attacker.ResolveStatusEffects(rand);
+            if(attacker.CurrentHitPoints <= 0 ) return;
             Attack chosenAttack = attacker.Attacks[rand.Next(attacker.Attacks.Count)];
             PerformAttack(attacker, defender, chosenAttack, rand);
         }
@@ -128,6 +130,11 @@ namespace MonsterFighter
                     defender.CurrentHitPoints -= damage;
                     Console.WriteLine($"Hit! {defender.Name} takes {damage} {damageComponent.DamageType} damage!");
                 }
+
+                if (attack.StatusEffect != null){
+                    defender.ApplyStatusEffect(attack.StatusEffect.Clone());
+                }
+                
             }
         }
 
