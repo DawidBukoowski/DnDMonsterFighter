@@ -37,7 +37,6 @@ namespace MonsterFighter
 
         private static void PerformTurn(Monster attacker, Monster defender, Random rand)
         {
-            attacker.ResolveStatusEffects(rand);
             if (attacker.CurrentHitPoints <= 0) return;
             Attack chosenAttack = attacker.Attacks[rand.Next(attacker.Attacks.Count)];
             PerformAttack(attacker, defender, chosenAttack, rand);
@@ -111,34 +110,6 @@ namespace MonsterFighter
 
                 defender.CurrentHitPoints -= damage;
                 Console.WriteLine($"Hit! {defender.Name} takes {damage} {damageComponent.DamageType} damage!");
-            }
-
-            if (attack.StatusEffect != null)
-            {
-                defender.ApplyStatusEffect(attack.StatusEffect.Clone());
-                if (attack.StatusEffect.Condition.HasValue)
-                {
-                    ApplyConditionEffect(attacker, defender, attack.StatusEffect, rand);
-                }
-            }
-
-
-        }
-
-        private static void ApplyConditionEffect(Monster attacker, Monster defender, StatusEffect effect, Random rand)
-        {
-            int roll = rand.Next(1, 21);
-            int modifier = defender.GetModifier(effect.SavingThrowAttribute);
-            int total = roll + modifier;
-
-            if (total >= effect.SavingThrowDC)
-            {
-                Console.WriteLine($"{defender.Name} succeeds the saving throw and avoids being {effect.Condition}!");
-            }
-            else
-            {
-                Console.WriteLine($"{defender.Name} fails the saving throw and is now {effect.Condition}!");
-                defender.Conditions.Add((Condition)effect.Condition);
             }
         }
 

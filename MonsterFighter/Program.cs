@@ -21,8 +21,7 @@ Monster flumph = new("Flumph", 12, 7,
     new("Tendrils", 4, [
         new("1d4+2", DamageType.Piercing),
         new("1d4", DamageType.Acid),
-        ],
-        statusEffect: new("Acid Burn", -1, MonsterFighter.Attribute.Constitution, 10, new("1d4", DamageType.Acid)))
+        ])
     ], vulnerabilities: [DamageType.Psychic]);
 Monster flying_snake = new("Flying Snake", 14, 50,
     4, 18, 11, 2, 12, 5, [
@@ -35,7 +34,7 @@ Monster mastiff = new("Mastiff", 12, 50,
     13, 14, 12, 3, 12, 7, [
         new("Bite", 3, [
             new("1d6+1", DamageType.Piercing)
-        ], statusEffect: new("Knocked Prone", -1, MonsterFighter.Attribute.Strength, 11, condition: Condition.Prone))
+        ])
     ]);
 FightSimulator.SimulateFight(mastiff, flying_snake);
 
