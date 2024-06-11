@@ -2,13 +2,14 @@ using System.Runtime;
 
 namespace MonsterFighter
 {
-    public class StatusEffect(string name, int duration, Attribute savingThrowAttribute, int savingThrowDC = 0, DamageComponent? recurringDamage = null)
+    public class StatusEffect(string name, int duration, Attribute savingThrowAttribute, int savingThrowDC = 0, DamageComponent? recurringDamage = null, Condition? condition = null)
     {
         public string Name { get; set; } = name;
         public int Duration { get; set; } = duration;
         public int SavingThrowDC { get; set; } = savingThrowDC;
         public Attribute SavingThrowAttribute { get; set; } = savingThrowAttribute;
         public DamageComponent? RecurringDamage { get; set; } = recurringDamage;
+        public Condition? Condition { get; set; } = condition;
         public bool HasSavingThrow { get; set; } = savingThrowDC > 0;
 
         public bool ResolveEffect(Monster target, Random rand)

@@ -19,7 +19,7 @@ namespace MonsterFighter
         public List<DamageType> Resistances { get; set; } = resistances ?? [];
         public List<DamageType> Vulnerabilities { get; set; } = vulnerabilities ?? [];
         public List<StatusEffect> StatusEffects { get; set; } = [];
-
+        public List<Condition> Conditions { get; set; } = [];
         public void Heal()
         {
             CurrentHitPoints = MaxHitPoints;
@@ -42,6 +42,7 @@ namespace MonsterFighter
         }
         public void ApplyStatusEffect(StatusEffect effect) {
             StatusEffects.Add(effect);
+            if(effect.Condition.HasValue) Conditions.Add(effect.Condition.Value);
             Console.WriteLine($"{Name} is affected by {effect.Name}");
         }
         public void ResolveStatusEffects(Random rand){
@@ -53,8 +54,18 @@ namespace MonsterFighter
             }
             foreach (var effect in effectsToRemove){
                 StatusEffects.Remove(effect);
+                if(effect.Condition.HasValue) Conditions.Remove(effect.Condition.Value);
                 Console.WriteLine($"{Name} is no longer affected by {effect.Name}.");
             }
+        }
+
+        public bool HasCondition(Condition condition){
+            return Conditions.Contains(condition);
+        }
+
+        public void RemoveCondition(Condition condition)
+        {
+            Conditions.Remove(condition);
         }
     }
 }

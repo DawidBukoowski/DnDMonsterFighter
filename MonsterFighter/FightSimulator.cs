@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+
 namespace MonsterFighter
 {
     public static class FightSimulator
@@ -36,7 +38,7 @@ namespace MonsterFighter
         private static void PerformTurn(Monster attacker, Monster defender, Random rand)
         {
             attacker.ResolveStatusEffects(rand);
-            if(attacker.CurrentHitPoints <= 0 ) return;
+            if (attacker.CurrentHitPoints <= 0) return;
             Attack chosenAttack = attacker.Attacks[rand.Next(attacker.Attacks.Count)];
             PerformAttack(attacker, defender, chosenAttack, rand);
         }
@@ -76,21 +78,12 @@ namespace MonsterFighter
             Console.WriteLine($"{first.Name} goes first!");
         }
 
-        private static void ExecuteSingleAttack(Monster attacker, Monster defender, Attack attack, Random rand, bool advantage = false, bool disadvantage = false)
+        private static void ExecuteSingleAttack(Monster attacker, Monster defender, Attack attack, Random rand)
         {
-            int roll;
-            if (advantage)
-            {
-                roll = RollWithAdvantageOrDisadvantage(rand, true);
-                Console.WriteLine($"{attacker.Name} attacks with advantage!");
-            }
-            else if (disadvantage)
-            {
-                roll = RollWithAdvantageOrDisadvantage(rand, false);
-                Console.WriteLine($"{attacker.Name} attacks with disadvantage!");
-            }
-            else { roll = rand.Next(1, 21); }
+            bool advantage = defender.HasCondition(Condition.Prone);
+            bool disadvantage = attacker.HasCondition(Condition.Prone);
 
+            int roll = RollWithAdvantageOrDisadvantage(rand, advantage, disadvantage);
             int toHit = roll + attack.BonusToHit;
             Console.WriteLine($"{attacker.Name} attacks with {attack.Name}: {toHit} ({roll}+{attack.BonusToHit}) to hit!");
 
@@ -109,32 +102,43 @@ namespace MonsterFighter
                 Console.WriteLine("Miss!");
                 return;
             }
+
+            foreach (var damageComponent in attack.DamageComponents)
+            {
+                int damage = damageComponent.RollDamage(rand);
+                if (isCritical) damage *= 2;
+                damage = ApplyDamageModifiers(defender, damageComponent.DamageType, damage);
+
+                defender.CurrentHitPoints -= damage;
+                Console.WriteLine($"Hit! {defender.Name} takes {damage} {damageComponent.DamageType} damage!");
+            }
+
+            if (attack.StatusEffect != null)
+            {
+                defender.ApplyStatusEffect(attack.StatusEffect.Clone());
+                if (attack.StatusEffect.Condition.HasValue)
+                {
+                    ApplyConditionEffect(attacker, defender, attack.StatusEffect, rand);
+                }
+            }
+
+
+        }
+
+        private static void ApplyConditionEffect(Monster attacker, Monster defender, StatusEffect effect, Random rand)
+        {
+            int roll = rand.Next(1, 21);
+            int modifier = defender.GetModifier(effect.SavingThrowAttribute);
+            int total = roll + modifier;
+
+            if (total >= effect.SavingThrowDC)
+            {
+                Console.WriteLine($"{defender.Name} succeeds the saving throw and avoids being {effect.Condition}!");
+            }
             else
             {
-                Dictionary<DamageType, int> damageSummary = [];
-
-                foreach (var damageComponent in attack.DamageComponents)
-                {
-                    int damage = damageComponent.RollDamage(rand);
-                    if (isCritical) damage *= 2;
-                    damage = ApplyDamageModifiers(defender, damageComponent.DamageType, damage);
-                    if (damageSummary.ContainsKey(damageComponent.DamageType))
-                    {
-                        damageSummary[damageComponent.DamageType] += damage;
-                    }
-                    else
-                    {
-                        damageSummary[damageComponent.DamageType] = damage;
-                    }
-
-                    defender.CurrentHitPoints -= damage;
-                    Console.WriteLine($"Hit! {defender.Name} takes {damage} {damageComponent.DamageType} damage!");
-                }
-
-                if (attack.StatusEffect != null){
-                    defender.ApplyStatusEffect(attack.StatusEffect.Clone());
-                }
-                
+                Console.WriteLine($"{defender.Name} fails the saving throw and is now {effect.Condition}!");
+                defender.Conditions.Add((Condition)effect.Condition);
             }
         }
 
@@ -146,12 +150,13 @@ namespace MonsterFighter
             return damage;
         }
 
-        private static int RollWithAdvantageOrDisadvantage(Random rand, bool advantage)
+        private static int RollWithAdvantageOrDisadvantage(Random rand, bool advantage, bool disadvantage)
         {
             int roll1 = rand.Next(1, 21);
             int roll2 = rand.Next(1, 21);
-
-            return advantage ? Math.Max(roll1, roll2) : Math.Min(roll1, roll2);
+            if (advantage && !disadvantage) return Math.Max(roll1, roll2);
+            else if (!advantage && disadvantage) return Math.Min(roll1, roll2);
+            else return roll1;
         }
     }
 }
