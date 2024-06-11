@@ -38,6 +38,11 @@ namespace MonsterFighter
         private static void PerformTurn(Monster attacker, Monster defender, Random rand)
         {
             if (attacker.CurrentHitPoints <= 0) return;
+            if (attacker.HasCondition(Condition.Charmed) || attacker.HasCondition(Condition.Incapacitated))
+            {
+                Console.WriteLine($"{attacker.Name} cannot attack!");
+                return;
+            }
             Attack chosenAttack = attacker.Attacks[rand.Next(attacker.Attacks.Count)];
             PerformAttack(attacker, defender, chosenAttack, rand);
         }
@@ -79,9 +84,11 @@ namespace MonsterFighter
 
         private static void ExecuteSingleAttack(Monster attacker, Monster defender, Attack attack, Random rand)
         {
-            bool advantage = defender.HasCondition(Condition.Prone);
-            bool disadvantage = attacker.HasCondition(Condition.Prone);
-
+            bool advantage = defender.HasCondition(Condition.Blinded) || defender.HasCondition(Condition.Prone) || defender.HasCondition(Condition.Restrained) ||
+                             defender.HasCondition(Condition.Shocked) || defender.HasCondition(Condition.Stunned) || attacker.HasCondition(Condition.Invisible);
+            bool disadvantage = attacker.HasCondition(Condition.Blinded) || attacker.HasCondition(Condition.Frightened) || attacker.HasCondition(Condition.Poisoned) ||
+                                attacker.HasCondition(Condition.Prone) || attacker.HasCondition(Condition.Restrained) || defender.HasCondition(Condition.Invisible);
+            
             int roll = RollWithAdvantageOrDisadvantage(rand, advantage, disadvantage);
             int toHit = roll + attack.BonusToHit;
             Console.WriteLine($"{attacker.Name} attacks with {attack.Name}: {toHit} ({roll}+{attack.BonusToHit}) to hit!");
@@ -91,7 +98,7 @@ namespace MonsterFighter
                 Console.WriteLine("Critical miss!");
                 return;
             }
-            bool isCritical = roll == 20;
+            bool isCritical = roll == 20 || defender.HasCondition(Condition.Paralyzed) || defender.HasCondition(Condition.Unconscious);
             if (isCritical)
             {
                 Console.WriteLine($"Critical hit!");
@@ -110,6 +117,11 @@ namespace MonsterFighter
 
                 defender.CurrentHitPoints -= damage;
                 Console.WriteLine($"Hit! {defender.Name} takes {damage} {damageComponent.DamageType} damage!");
+            }
+
+            if (attack.Condition.HasValue)
+            {
+                defender.ApplyCondition(attack.Condition.Value);
             }
         }
 

@@ -6,7 +6,7 @@ namespace MonsterFighter
         public int ArmorClass { get; set; } = armorClass;
         public int MaxHitPoints { get; set; } = hitPoints;
         public int CurrentHitPoints { get; set; } = hitPoints;
-        public Dictionary<Attribute, int> Attributes {get; set;} = new Dictionary<Attribute, int> {
+        public Dictionary<Attribute, int> Attributes { get; set; } = new Dictionary<Attribute, int> {
             {Attribute.Strength, strength},
             {Attribute.Dexterity, dexterity},
             {Attribute.Constitution, constitution},
@@ -36,16 +36,28 @@ namespace MonsterFighter
         }
         public int GetModifier(Attribute attribute)
         {
-            if(Attributes.TryGetValue(attribute, out int value)) return (value - 10) / 2;
+            if (Attributes.TryGetValue(attribute, out int value)) return (value - 10) / 2;
             throw new ArgumentException($"Attribute {attribute} not found.");
         }
-
-        public bool HasCondition(Condition condition){
+        public void ApplyCondition(Condition condition)
+        {
+            if (!Conditions.Contains(condition))
+            {
+                Conditions.Add(condition);
+                Console.WriteLine($"{Name} is now {condition}.");
+            }
+        }
+        public bool HasCondition(Condition condition)
+        {
             return Conditions.Contains(condition);
         }
-
         public void RemoveCondition(Condition condition)
         {
+            if (HasCondition(condition))
+            {
+                Conditions.Remove(condition);
+                Console.WriteLine($"{Name} is no longer {condition}.");
+            }
             Conditions.Remove(condition);
         }
     }

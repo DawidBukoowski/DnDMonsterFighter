@@ -2,6 +2,17 @@ namespace MonsterFighter
 {
     public enum Condition
     {
-        Prone
+        Blinded,
+        Charmed,
+        Frightened,
+        Incapacitated,
+        Invisible,
+        Paralyzed,
+        Poisoned,
+        Prone,
+        Restrained,
+        Shocked,
+        Stunned,
+        Unconscious
     }
 }
