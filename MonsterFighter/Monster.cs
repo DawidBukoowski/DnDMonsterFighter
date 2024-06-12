@@ -30,6 +30,13 @@ namespace MonsterFighter
             Console.WriteLine($"{Name} rolled {total} ({roll}+{GetModifier(Attribute.Dexterity)}) for initiative.");
             return total;
         }
+        public int RollSave(Attribute attribute, int dc, Random rand)
+        {
+            int roll = rand.Next(1, 21);
+            int total = roll + GetModifier(attribute);
+            Console.WriteLine($"{Name} rolled {total} ({roll}+{GetModifier(attribute)}) on a DC {dc} {attribute} saving throw.");
+            return total;
+        }
         public string GetCurrentHP()
         {
             return $"{CurrentHitPoints}/{MaxHitPoints}";
@@ -41,7 +48,7 @@ namespace MonsterFighter
         }
         public void ApplyCondition(Condition condition)
         {
-            if (!Conditions.Contains(condition))
+            if (!HasCondition(condition))
             {
                 Conditions.Add(condition);
                 Console.WriteLine($"{Name} is now {condition}.");

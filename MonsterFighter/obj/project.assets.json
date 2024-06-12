@@ -8,19 +8,19 @@
     "net8.0": []
   },
   "packageFolders": {
-    "C:\\Users\\user\\.nuget\\packages\\": {}
+    "C:\\Users\\Dawid Bukowski\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\user\\Repos\\DNDprojects\\DnDMonsterFightSimulator\\MonsterFighter\\MonsterFighter.csproj",
+      "projectUniqueName": "C:\\Users\\Dawid Bukowski\\Desktop\\dddd\\DnDMonsterFighter\\MonsterFighter\\MonsterFighter.csproj",
       "projectName": "MonsterFighter",
-      "projectPath": "C:\\Users\\user\\Repos\\DNDprojects\\DnDMonsterFightSimulator\\MonsterFighter\\MonsterFighter.csproj",
-      "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\user\\Repos\\DNDprojects\\DnDMonsterFightSimulator\\MonsterFighter\\obj\\",
+      "projectPath": "C:\\Users\\Dawid Bukowski\\Desktop\\dddd\\DnDMonsterFighter\\MonsterFighter\\MonsterFighter.csproj",
+      "packagesPath": "C:\\Users\\Dawid Bukowski\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Dawid Bukowski\\Desktop\\dddd\\DnDMonsterFighter\\MonsterFighter\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Dawid Bukowski\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"

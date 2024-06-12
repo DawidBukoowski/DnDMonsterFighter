@@ -4,10 +4,11 @@ namespace MonsterFighter
 {
     public static class FightSimulator
     {
+        static readonly Random rand = new();
+
         public static void SimulateFight(Monster monster1, Monster monster2)
         {
-            Random rand = new();
-            DetermineInitative(monster1, monster2, rand, out Monster first, out Monster second);
+            DetermineInitative(monster1, monster2, out Monster first, out Monster second);
 
             int roundCounter = 1;
             while (monster1.CurrentHitPoints > 0 && monster2.CurrentHitPoints > 0)
@@ -16,9 +17,9 @@ namespace MonsterFighter
                 Console.WriteLine($"{monster1.Name} ({monster1.GetCurrentHP()}) vs. {monster2.Name} ({monster2.GetCurrentHP()})");
                 Console.WriteLine($"---------------------------------------");
 
-                PerformTurn(first, second, rand);
+                PerformTurn(first, second);
                 if (second.CurrentHitPoints <= 0) break;
-                PerformTurn(second, first, rand);
+                PerformTurn(second, first);
             }
             DeclareWinner(monster1, monster2);
         }
@@ -35,7 +36,7 @@ namespace MonsterFighter
             }
         }
 
-        private static void PerformTurn(Monster attacker, Monster defender, Random rand)
+        private static void PerformTurn(Monster attacker, Monster defender)
         {
             if (attacker.CurrentHitPoints <= 0) return;
             if (attacker.HasCondition(Condition.Charmed) || attacker.HasCondition(Condition.Incapacitated))
@@ -44,26 +45,26 @@ namespace MonsterFighter
                 return;
             }
             Attack chosenAttack = attacker.Attacks[rand.Next(attacker.Attacks.Count)];
-            PerformAttack(attacker, defender, chosenAttack, rand);
+            PerformAttack(attacker, defender, chosenAttack);
         }
 
-        private static void PerformAttack(Monster attacker, Monster defender, Attack attack, Random rand)
+        private static void PerformAttack(Monster attacker, Monster defender, Attack attack)
         {
             if (attack.Type == AttackType.Multi)
             {
                 foreach (var subAttack in attack.SubAttacks)
                 {
-                    ExecuteSingleAttack(attacker, defender, subAttack, rand);
+                    ExecuteSingleAttack(attacker, defender, subAttack);
                     if (defender.CurrentHitPoints <= 0) break;
                 }
             }
             else
             {
-                ExecuteSingleAttack(attacker, defender, attack, rand);
+                ExecuteSingleAttack(attacker, defender, attack);
             }
         }
 
-        private static void DetermineInitative(Monster monster1, Monster monster2, Random rand, out Monster first, out Monster second)
+        private static void DetermineInitative(Monster monster1, Monster monster2, out Monster first, out Monster second)
         {
             int initiative1 = monster1.RollInitiative(rand);
             int initiative2 = monster2.RollInitiative(rand);
@@ -82,14 +83,14 @@ namespace MonsterFighter
             Console.WriteLine($"{first.Name} goes first!");
         }
 
-        private static void ExecuteSingleAttack(Monster attacker, Monster defender, Attack attack, Random rand)
+        private static void ExecuteSingleAttack(Monster attacker, Monster defender, Attack attack)
         {
             bool advantage = defender.HasCondition(Condition.Blinded) || defender.HasCondition(Condition.Prone) || defender.HasCondition(Condition.Restrained) ||
                              defender.HasCondition(Condition.Shocked) || defender.HasCondition(Condition.Stunned) || attacker.HasCondition(Condition.Invisible);
             bool disadvantage = attacker.HasCondition(Condition.Blinded) || attacker.HasCondition(Condition.Frightened) || attacker.HasCondition(Condition.Poisoned) ||
                                 attacker.HasCondition(Condition.Prone) || attacker.HasCondition(Condition.Restrained) || defender.HasCondition(Condition.Invisible);
-            
-            int roll = RollWithAdvantageOrDisadvantage(rand, advantage, disadvantage);
+
+            int roll = RollWithAdvantageOrDisadvantage(advantage, disadvantage);
             int toHit = roll + attack.BonusToHit;
             Console.WriteLine($"{attacker.Name} attacks with {attack.Name}: {toHit} ({roll}+{attack.BonusToHit}) to hit!");
 
@@ -119,9 +120,31 @@ namespace MonsterFighter
                 Console.WriteLine($"Hit! {defender.Name} takes {damage} {damageComponent.DamageType} damage!");
             }
 
-            if (attack.Condition.HasValue)
+            //czy jest condition w ataku
+            //tak//czy defender ma juz to condition
+            //tak//nie//rollAgainstDC
+            //tak//nie//fail//defender.ApplyCondition
+            //tak//nie//success//return
+            //tak//tak//return
+            //nie//return
+            if (attack.Condition.HasValue && !defender.HasCondition(attack.Condition.Value))
             {
-                defender.ApplyCondition(attack.Condition.Value);
+                if (attack.SavingThrowDC > 0) RollAgainstCondition(attack, defender);
+                else defender.ApplyCondition(attack.Condition.Value);
+            }
+        }
+        private static void RollAgainstCondition(Attack attack, Monster defender)
+        {
+            Condition condition = attack.Condition.Value;
+            int roll = defender.RollSave(attack.SavingThrowAttribute.Value, attack.SavingThrowDC, rand);
+            if (roll >= attack.SavingThrowDC)
+            {
+                Console.WriteLine($"{defender.Name} saves against being {condition}.");
+            }
+            else
+            {
+                Console.WriteLine($"{defender.Name} fails against being {condition}.");
+                defender.ApplyCondition(condition);
             }
         }
 
@@ -133,7 +156,7 @@ namespace MonsterFighter
             return damage;
         }
 
-        private static int RollWithAdvantageOrDisadvantage(Random rand, bool advantage, bool disadvantage)
+        private static int RollWithAdvantageOrDisadvantage(bool advantage, bool disadvantage)
         {
             int roll1 = rand.Next(1, 21);
             int roll2 = rand.Next(1, 21);

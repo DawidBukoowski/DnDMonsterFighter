@@ -30,11 +30,27 @@ Monster flying_snake = new("Flying Snake", 14, 50,
         new("3d4", DamageType.Poison),
         ])
     ], vulnerabilities: [DamageType.Psychic]);
-Monster mastiff = new("Mastiff", 12, 50,
+Monster mastiff = new("Mastiff", 12, 120,
     13, 14, 12, 3, 12, 7, [
         new("Bite", 3, [
             new("1d6+1", DamageType.Piercing)
+        ], condition: Condition.Prone, savingThrowDC: 11, savingThrowAttribute: MonsterFighter.Attribute.Strength)
+    ]);
+Attack psi_attack = new(
+    "Psi-Imbued Blade",
+    6,
+    [
+        new("2d6+3", DamageType.Psychic)
+    ],
+    condition: Condition.Frightened,
+    savingThrowDC: 15,
+    savingThrowAttribute: MonsterFighter.Attribute.Wisdom);
+
+Monster mercane = new("Mercane", 13, 75,
+    16, 10, 15, 18, 16, 15, [
+        new("Multiattack", 0, [new("", DamageType.Piercing)], AttackType.Multi, [
+            psi_attack, psi_attack, psi_attack
         ])
     ]);
-FightSimulator.SimulateFight(mastiff, flying_snake);
+FightSimulator.SimulateFight(mastiff, mercane);
 

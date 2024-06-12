@@ -1,6 +1,6 @@
 namespace MonsterFighter
 {
-    public class Attack(string name, int bonusToHit, List<DamageComponent> damageComponents, AttackType type = AttackType.Single, List<Attack>? subAttacks = null, Condition? condition = null)
+    public class Attack(string name, int bonusToHit, List<DamageComponent> damageComponents, AttackType type = AttackType.Single, List<Attack>? subAttacks = null, Condition? condition = null, int savingThrowDC = 0, Attribute? savingThrowAttribute = null)
     {
         public string Name { get; set; } = name;
         public int BonusToHit { get; set; } = bonusToHit;
@@ -8,5 +8,7 @@ namespace MonsterFighter
         public List<Attack> SubAttacks { get; set; } = subAttacks ?? [];
         public List<DamageComponent> DamageComponents { get; set; } = damageComponents;
         public Condition? Condition { get; set; } = condition;
+        public int SavingThrowDC { get; set; } = savingThrowDC;
+        public Attribute? SavingThrowAttribute { get; } = savingThrowAttribute;
     }
 }
