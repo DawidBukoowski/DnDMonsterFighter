@@ -56,5 +56,6 @@ Monster mercane = new("Mercane", 13, 75,
             psi_attack, psi_attack, psi_attack
         ])
     ]);
+//Neogi Hatchling
 FightSimulator.SimulateFight(mercane, mastiff);
 
