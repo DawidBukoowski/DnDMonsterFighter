@@ -6,18 +6,24 @@ namespace MonsterFighter
         public DamageType DamageType { get; set; }
         public int? FixedDamage { get; set; }
         public bool IsFixedDamage { get; set; }
+        public int? SavingThrowDC { get; set; }
+        public Attribute? SavingThrowAttribute { get; set; }
 
-        public DamageComponent(string damage, DamageType damageType)
+        public DamageComponent(string damage, DamageType damageType, int? savingThrowDC = null, Attribute? savingThrowAttribute = null)
         {
             Damage = damage;
             DamageType = damageType;
             IsFixedDamage = false;
+            SavingThrowDC = savingThrowDC;
+            SavingThrowAttribute = savingThrowAttribute;
         }
-        public DamageComponent(int damage, DamageType damageType)
+        public DamageComponent(int damage, DamageType damageType, int? savingThrowDC = null, Attribute? savingThrowAttribute = null)
         {
             FixedDamage = damage;
             DamageType = damageType;
             IsFixedDamage = true;
+            SavingThrowDC = savingThrowDC;
+            SavingThrowAttribute = savingThrowAttribute;
         }
 
         public int RollDamage(Random rand)

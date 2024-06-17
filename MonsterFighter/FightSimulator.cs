@@ -117,18 +117,25 @@ namespace MonsterFighter
 
             foreach (var damageComponent in attack.DamageComponents)
             {
-                int damage = damageComponent.RollDamage(rand);
-                if (isCritical) damage *= 2;
-                damage = ApplyDamageModifiers(defender, damageComponent.DamageType, damage);
+                if (damageComponent.SavingThrowDC.HasValue && damageComponent.SavingThrowAttribute.HasValue)
+                {
+                    RollAgainstConditionalDamage(damageComponent, defender);
+                }
+                else
+                {
+                    int damage = damageComponent.RollDamage(rand);
+                    if (isCritical) damage *= 2;
+                    damage = ApplyDamageModifiers(defender, damageComponent.DamageType, damage);
 
-                defender.CurrentHitPoints -= damage;
-                Console.WriteLine($"Hit! {defender.Name} takes {damage} {damageComponent.DamageType} damage!");
+                    defender.CurrentHitPoints -= damage;
+                    Console.WriteLine($"Hit! {defender.Name} takes {damage} {damageComponent.DamageType} damage!");
+                }
             }
-
-            if (attack.Condition.HasValue && !defender.HasCondition(attack.Condition.Value))
+            ConditionComponent condition = attack.ConditionComponent;
+            if (condition != null && !defender.HasCondition(condition.Condition))
             {
-                if (attack.SavingThrowDC > 0) RollAgainstCondition(attack, defender);
-                else defender.ApplyCondition(attack.Condition.Value);
+                if (condition.SavingThrowDC > 0) RollAgainstCondition(condition, defender);
+                else defender.ApplyCondition(condition.Condition);
             }
 
             if (attack.RecurringEffect != null && !defender.RecurringEffects.Contains(attack.RecurringEffect))
@@ -136,18 +143,37 @@ namespace MonsterFighter
                 defender.ApplyRecurringEffect(attack.RecurringEffect);
             }
         }
-        private static void RollAgainstCondition(Attack attack, Monster defender)
+        private static void RollAgainstCondition(ConditionComponent conditionComponent, Monster defender)
         {
-            Condition condition = attack.Condition.Value;
-            int roll = defender.RollSave(attack.SavingThrowAttribute.Value, attack.SavingThrowDC, rand);
-            if (roll >= attack.SavingThrowDC)
+            int roll = defender.RollSave(conditionComponent.SavingThrowAttribute, conditionComponent.SavingThrowDC, rand);
+            if (roll >= conditionComponent.SavingThrowDC)
             {
-                Console.WriteLine($"{defender.Name} saves against being {condition}.");
+                Console.WriteLine($"{defender.Name} saves against being {conditionComponent.Condition}.");
             }
             else
             {
-                Console.WriteLine($"{defender.Name} fails against being {condition}.");
-                defender.ApplyCondition(condition);
+                Console.WriteLine($"{defender.Name} fails against being {conditionComponent.Condition}.");
+                defender.ApplyCondition(conditionComponent.Condition);
+            }
+        }
+
+        private static void RollAgainstConditionalDamage(DamageComponent damageComponent, Monster defender)
+        {
+            int roll = rand.Next(1, 21);
+            int modifier = defender.GetModifier(damageComponent.SavingThrowAttribute.Value);
+            int total = roll + modifier;
+            string sign = modifier >= 0 ? "+" : "";
+            Console.WriteLine($"{defender.Name} rolled {total} ({roll}{sign}{modifier}) on a DC {damageComponent.SavingThrowDC} {damageComponent.SavingThrowAttribute} saving throw.");
+            if (total < damageComponent.SavingThrowDC.Value)
+            {
+                int damage = damageComponent.RollDamage(rand);
+                damage = ApplyDamageModifiers(defender, damageComponent.DamageType, damage);
+                defender.CurrentHitPoints -= damage;
+                Console.WriteLine($"{defender.Name} fails the saving throw and takes {damage} {damageComponent.DamageType} damage!");
+            }
+            else
+            {
+                Console.WriteLine($"{defender.Name} succeeds the saving throw and takes no additional damage.");
             }
         }
 

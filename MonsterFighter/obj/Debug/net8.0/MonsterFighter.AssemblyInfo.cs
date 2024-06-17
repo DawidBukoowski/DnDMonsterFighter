@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MonsterFighter")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+92cbe011d3aa1ade9304cbadf31ba65617a776fc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+066255a00cb9c430b061653b09b0a74498ae6464")]
 [assembly: System.Reflection.AssemblyProductAttribute("MonsterFighter")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MonsterFighter")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
