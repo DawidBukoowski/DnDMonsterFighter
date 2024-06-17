@@ -44,6 +44,12 @@ namespace MonsterFighter
                 Console.WriteLine($"{attacker.Name} cannot attack!");
                 return;
             }
+            if (attacker.HasCondition(Condition.Prone) && rand.Next(2) == 0)
+            {
+                attacker.RemoveCondition(Condition.Prone);
+                Console.WriteLine($"{attacker.Name} gets up from being prone and forgoes the attack.");
+                return;
+            }
             Attack chosenAttack = attacker.Attacks[rand.Next(attacker.Attacks.Count)];
             PerformAttack(attacker, defender, chosenAttack);
         }
@@ -63,7 +69,6 @@ namespace MonsterFighter
                 ExecuteSingleAttack(attacker, defender, attack);
             }
         }
-
         private static void DetermineInitative(Monster monster1, Monster monster2, out Monster first, out Monster second)
         {
             int initiative1 = monster1.RollInitiative(rand);
@@ -82,7 +87,6 @@ namespace MonsterFighter
 
             Console.WriteLine($"{first.Name} goes first!");
         }
-
         private static void ExecuteSingleAttack(Monster attacker, Monster defender, Attack attack)
         {
             bool advantage = defender.HasCondition(Condition.Blinded) || defender.HasCondition(Condition.Prone) || defender.HasCondition(Condition.Restrained) ||
@@ -120,13 +124,6 @@ namespace MonsterFighter
                 Console.WriteLine($"Hit! {defender.Name} takes {damage} {damageComponent.DamageType} damage!");
             }
 
-            //czy jest condition w ataku
-            //tak//czy defender ma juz to condition
-            //tak//nie//rollAgainstDC
-            //tak//nie//fail//defender.ApplyCondition
-            //tak//nie//success//return
-            //tak//tak//return
-            //nie//return
             if (attack.Condition.HasValue && !defender.HasCondition(attack.Condition.Value))
             {
                 if (attack.SavingThrowDC > 0) RollAgainstCondition(attack, defender);
