@@ -19,6 +19,7 @@ namespace MonsterFighter
         public List<DamageType> Resistances { get; set; } = resistances ?? [];
         public List<DamageType> Vulnerabilities { get; set; } = vulnerabilities ?? [];
         public List<Condition> Conditions { get; set; } = [];
+        public List<RecurringEffect> RecurringEffects { get; set; } = [];
         public void Heal()
         {
             CurrentHitPoints = MaxHitPoints;
@@ -33,8 +34,10 @@ namespace MonsterFighter
         public int RollSave(Attribute attribute, int dc, Random rand)
         {
             int roll = rand.Next(1, 21);
-            int total = roll + GetModifier(attribute);
-            Console.WriteLine($"{Name} rolled {total} ({roll}+{GetModifier(attribute)}) on a DC {dc} {attribute} saving throw.");
+            int modifier = GetModifier(attribute);
+            int total = roll + modifier;
+            string sign = modifier >= 0 ? "+" : "";
+            Console.WriteLine($"{Name} rolled {total} ({roll}{sign}{modifier}) on a DC {dc} {attribute} saving throw.");
             return total;
         }
         public string GetCurrentHP()
@@ -66,6 +69,46 @@ namespace MonsterFighter
                 Console.WriteLine($"{Name} is no longer {condition}.");
             }
             Conditions.Remove(condition);
+        }
+
+        public void ApplyRecurringEffect(RecurringEffect effect)
+        {
+            RecurringEffects.Add(effect);
+            Console.WriteLine($"{Name} is now affected by {effect.Name}.");
+        }
+
+        public void ResolveRecurringEffects(Random rand)
+        {
+            List<RecurringEffect> effectsToRemove = [];
+
+            foreach (var effect in RecurringEffects)
+            {
+                int roll = rand.Next(1, 21);
+                int total = roll + GetModifier(effect.SavingThrowAttribute);
+
+                if (total >= effect.SavingThrowDC)
+                {
+                    Console.WriteLine($"{Name} succeeds the saving throw and ends the {effect.Name} effect!");
+                    effectsToRemove.Add(effect);
+                }
+                else
+                {
+                    int damage = effect.DamageComponent.RollDamage(rand);
+                    CurrentHitPoints -= damage;
+                    Console.WriteLine($"{Name} fails the saving throw and takes {damage} {effect.DamageComponent.DamageType} damage!");
+
+                    if (CurrentHitPoints <= 0)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            foreach (var effect in effectsToRemove)
+            {
+                RecurringEffects.Remove(effect);
+                Console.WriteLine($"{Name} is no longer affected by {effect.Name}.");
+            }
         }
     }
 }

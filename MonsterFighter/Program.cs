@@ -16,12 +16,11 @@ Monster blood_tool_harpy = new("Blood-Toll Harpy", 11, 9,
         new("Claws", 3, [new("1d4+1", DamageType.Slashing)])
     ])
 ]);
-Monster flumph = new("Flumph", 12, 7,
+Monster flumph = new("Flumph", 12, 70,
     6, 15, 10, 14, 14, 11, [
     new("Tendrils", 4, [
         new("1d4+2", DamageType.Piercing),
-        new("1d4", DamageType.Acid),
-        ])
+        ], recurringEffect: new("Acid", 10, MonsterFighter.Attribute.Constitution, new("1d4", DamageType.Acid)))
     ], vulnerabilities: [DamageType.Psychic]);
 Monster flying_snake = new("Flying Snake", 14, 50,
     4, 18, 11, 2, 12, 5, [
@@ -36,21 +35,19 @@ Monster mastiff = new("Mastiff", 12, 120,
             new("1d6+1", DamageType.Piercing)
         ], condition: Condition.Prone, savingThrowDC: 11, savingThrowAttribute: MonsterFighter.Attribute.Strength)
     ]);
+
 Attack psi_attack = new(
     "Psi-Imbued Blade",
     6,
-    [
-        new("2d6+3", DamageType.Psychic)
-    ],
+    [new("2d6+3", DamageType.Psychic)],
     condition: Condition.Frightened,
     savingThrowDC: 15,
     savingThrowAttribute: MonsterFighter.Attribute.Wisdom);
-
 Monster mercane = new("Mercane", 13, 75,
     16, 10, 15, 18, 16, 15, [
         new("Multiattack", 0, [new("", DamageType.Piercing)], AttackType.Multi, [
             psi_attack, psi_attack, psi_attack
         ])
     ]);
-FightSimulator.SimulateFight(mastiff, mercane);
+FightSimulator.SimulateFight(mastiff, flumph);
 

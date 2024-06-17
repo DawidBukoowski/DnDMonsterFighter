@@ -52,6 +52,7 @@ namespace MonsterFighter
             }
             Attack chosenAttack = attacker.Attacks[rand.Next(attacker.Attacks.Count)];
             PerformAttack(attacker, defender, chosenAttack);
+            attacker.ResolveRecurringEffects(rand);
         }
 
         private static void PerformAttack(Monster attacker, Monster defender, Attack attack)
@@ -128,6 +129,11 @@ namespace MonsterFighter
             {
                 if (attack.SavingThrowDC > 0) RollAgainstCondition(attack, defender);
                 else defender.ApplyCondition(attack.Condition.Value);
+            }
+
+            if (attack.RecurringEffect != null && !defender.RecurringEffects.Contains(attack.RecurringEffect))
+            {
+                defender.ApplyRecurringEffect(attack.RecurringEffect);
             }
         }
         private static void RollAgainstCondition(Attack attack, Monster defender)
